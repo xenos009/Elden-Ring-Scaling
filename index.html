@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elden Ring Scaling Optimizer</title>
+  <style>
+    /* Base Styles */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d0d0d;
+      color: #ececec;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background: #1e1e2e;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+      max-width: 600px;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      margin: 0 0 20px;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      color: #ffffff;
+    }
+    /* Section Titles */
+    .section {
+      margin-top: 25px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #333;
+    }
+    .section:first-of-type {
+      margin-top: 0;
+      border: none;
+      padding-bottom: 0;
+    }
+    .section-title {
+      font-size: 1.1rem;
+      color: #5fb3ff;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    /* Form Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      color: #bbbbbb;
+    }
+    select, input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      background: #2a2a3a;
+      color: #ececec;
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+    }
+    select:focus, input:focus {
+      outline: none;
+      border-color: #5fb3ff;
+    }
+    /* Button */
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #5fb3ff;
+      color: #1e1e2e;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transition: background 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background: #429edb;
+      transform: translateY(-2px);
+    }
+    /* Result Card */
+    .result {
+      margin-top: 30px;
+      background: #2a2a3a;
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid #444;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .stat-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+    }
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+    }
+    .stat-name {
+      font-weight: 600;
+      color: #5fb3ff;
+    }
+    .stat-value {
+      font-weight: 500;
+      color: #ffb547;
+    }
+    .total {
+      margin-top: 20px;
+      text-align: right;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #ffe15d;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Scaling Optimizer</h1>
+
+    <!-- Scaling Grades Section -->
+    <div class="section">
+      <div class="section-title">Scaling Grades</div>
+      <div class="grid">
+        <div>
+          <label for="strGrade">Strength Grade</label>
+          <select id="strGrade"><option>None</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+        <div>
+          <label for="dexGrade">Dexterity Grade</label>
+          <select id="dexGrade"><option>None</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+        <div>
+          <label for="intGrade">Intelligence Grade</label>
+          <select id="intGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+        <div>
+          <label for="fthGrade">Faith Grade</label>
+          <select id="fthGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+        <div>
+          <label for="arcGrade">Arcane Grade</label>
+          <select id="arcGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Base Stats Section -->
+    <div class="section">
+      <div class="section-title">Base Stats</div>
+      <div class="grid">
+        <div>
+          <label for="strStat">Strength</label>
+          <input id="strStat" type="number" value="10" min="0" max="99">
+        </div>
+        <div>
+          <label for="dexStat">Dexterity</label>
+          <input id="dexStat" type="number" value="10" min="0" max="99">
+        </div>
+        <div>
+          <label for="intStat">Intelligence</label>
+          <input id="intStat" type="number" value="10" min="0" max="99">
+        </div>
+        <div>
+          <label for="fthStat">Faith</label>
+          <input id="fthStat" type="number" value="10" min="0" max="99">
+        </div>
+        <div>
+          <label for="arcStat">Arcane</label>
+          <input id="arcStat" type="number" value="10" min="0" max="99">
+        </div>
+      </div>
+    </div>
+
+    <!-- Points Section -->
+    <div class="section">
+      <div class="section-title">Available Points</div>
+      <div>
+        <input id="points" type="number" value="0" min="0" style="width:100%; padding:10px 12px; border-radius:8px; border:1px solid #333; background:#2a2a3a; color:#ececec;">
+      </div>
+    </div>
+
+    <button id="optimizeBtn">Optimize Allocation</button>
+    <div class="result" id="result"></div>
+  </div>
+  <script>
+    const physical = [0,15,35,46.5,57.5,67.5,75,82.5,90,92.5,96];
+    const magic = [0,19,40,53,66.5,80,85,90,95,97.5,100];
+
+    function statGrade(s) {
+      switch(s) {
+        case 'S': return 1.875;
+        case 'A': return 1.575;
+        case 'B': return 1.14995;
+        case 'C': return 0.74995;
+        case 'D': return 0.42495;
+        case 'E': return 0.125;
+        default: return 0.0;
+      }
+    }
+
+    function f(x, table) {
+      x = Math.min(Math.max(x,0),99);
+      const i = Math.floor(x/10);
+      const t = (x%10)/10;
+      const P = (table==='phys')?physical:magic;
+      if(i>=P.length-1) return P[P.length-1];
+      return P[i] + (P[i+1]-P[i])*t;
+    }
+
+    function totalBonus(scaling, stats) {
+      return scaling.reduce((sum, g, i) => {
+        if (g <= 0) return sum;
+        const table = i < 2 ? 'phys' : 'magic';
+        return sum + g * (f(stats[i], table) / 100);
+      }, 0);
+    }
+
+    function optimize(scaling, base, points) {
+      const active = scaling.map((g,i)=> g>0?i:-1).filter(i=>i>=0);
+      let best = base.slice();
+      let bestScore = totalBonus(scaling, base);
+      function dfs(idx, curr, used) {
+        if (used > points) return;
+        if (idx === active.length) {
+          const score = totalBonus(scaling, curr);
+          if (score > bestScore) {
+            bestScore = score;
+            best = curr.slice();
+          }
+          return;
+        }
+        const i = active[idx];
+        for (let inc = 0; inc <= points - used; inc++) {
+          curr[i] = base[i] + inc;
+          dfs(idx + 1, curr, used + inc);
+        }
+        curr[i] = base[i];
+      }
+      dfs(0, base.slice(), 0);
+      return {stats: best, score: bestScore};
+    }
+
+    document.getElementById('optimizeBtn').addEventListener('click', ()=> {
+      const scaling = [
+        statGrade(document.getElementById('strGrade').value),
+        statGrade(document.getElementById('dexGrade').value),
+        statGrade(document.getElementById('intGrade').value),
+        statGrade(document.getElementById('fthGrade').value),
+        statGrade(document.getElementById('arcGrade').value)
+      ];
+      const base = [
+        +document.getElementById('strStat').value,
+        +document.getElementById('dexStat').value,
+        +document.getElementById('intStat').value,
+        +document.getElementById('fthStat').value,
+        +document.getElementById('arcStat').value
+      ];
+      const points = +document.getElementById('points').value;
+      const result = optimize(scaling, base, points);
+      const list = document.createElement('ul');
+      list.className = 'stat-list';
+      ['STR','DEX','INT','FTH','ARC'].forEach((name,i) => {
+        const li = document.createElement('li');
+        li.className = 'stat-item';
+        const diff = result.stats[i] - base[i];
+        li.innerHTML = `<span class='stat-name'>${name}</span><span class='stat-value'>${result.stats[i]} (+${diff})</span>`;
+        list.appendChild(li);
+      });
+      document.getElementById('result').innerHTML = '';
+      document.getElementById('result').appendChild(list);
+      const totalDiv = document.createElement('div');
+      totalDiv.className = 'total';
+      totalDiv.textContent = `Total Bonus: ${result.score.toFixed(3)}`;
+      document.getElementById('result').appendChild(totalDiv);
+    });
+  </script>
+</body>
+</html>
