@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Elden Ring Scaling Optimizer</title>
   <style>
     /* Base Styles */
@@ -61,7 +61,7 @@
       font-size: 0.9rem;
       color: #bbbbbb;
     }
-    select, input {
+    select, input[type="number"] {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid #333;
@@ -74,6 +74,10 @@
     select:focus, input:focus {
       outline: none;
       border-color: #5fb3ff;
+    }
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      margin-right: 10px;
     }
     /* Button */
     button {
@@ -199,9 +203,18 @@
       </div>
     </div>
 
+    <!-- Two-Handing Toggle -->
+    <div style="margin-top: 20px;">
+      <label style="font-size: 0.95rem; color: #bbbbbb;">
+        <input type="checkbox" id="twoHanding">
+        Two-Handing Weapon (1.5x Strength Scaling)
+      </label>
+    </div>
+
     <button id="optimizeBtn">Optimize Allocation</button>
     <div class="result" id="result"></div>
   </div>
+
   <script>
     const physical = [0,15,35,46.5,57.5,67.5,75,82.5,90,92.5,96];
     const magic = [0,19,40,53,66.5,80,85,90,95,97.5,100];
@@ -222,27 +235,31 @@
       x = Math.min(Math.max(x,0),99);
       const i = Math.floor(x/10);
       const t = (x%10)/10;
-      const P = (table==='phys')?physical:magic;
+      const P = (table==='phys') ? physical : magic;
       if(i>=P.length-1) return P[P.length-1];
       return P[i] + (P[i+1]-P[i])*t;
     }
 
-    function totalBonus(scaling, stats) {
+    function totalBonus(scaling, stats, twoHanding) {
       return scaling.reduce((sum, g, i) => {
         if (g <= 0) return sum;
         const table = i < 2 ? 'phys' : 'magic';
-        return sum + g * (f(stats[i], table) / 100);
+        let statValue = stats[i];
+        if (twoHanding && i === 0) {
+          statValue = Math.floor(statValue * 1.5);
+        }
+        return sum + g * (f(statValue, table) / 100);
       }, 0);
     }
 
-    function optimize(scaling, base, points) {
+    function optimize(scaling, base, points, twoHanding) {
       const active = scaling.map((g,i)=> g>0?i:-1).filter(i=>i>=0);
       let best = base.slice();
-      let bestScore = totalBonus(scaling, base);
+      let bestScore = totalBonus(scaling, base, twoHanding);
       function dfs(idx, curr, used) {
         if (used > points) return;
         if (idx === active.length) {
-          const score = totalBonus(scaling, curr);
+          const score = totalBonus(scaling, curr, twoHanding);
           if (score > bestScore) {
             bestScore = score;
             best = curr.slice();
@@ -276,7 +293,9 @@
         +document.getElementById('arcStat').value
       ];
       const points = +document.getElementById('points').value;
-      const result = optimize(scaling, base, points);
+      const twoHanding = document.getElementById('twoHanding').checked;
+      const result = optimize(scaling, base, points, twoHanding);
+
       const list = document.createElement('ul');
       list.className = 'stat-list';
       ['STR','DEX','INT','FTH','ARC'].forEach((name,i) => {
@@ -286,8 +305,10 @@
         li.innerHTML = `<span class='stat-name'>${name}</span><span class='stat-value'>${result.stats[i]} (+${diff})</span>`;
         list.appendChild(li);
       });
+
       document.getElementById('result').innerHTML = '';
       document.getElementById('result').appendChild(list);
+
       const totalDiv = document.createElement('div');
       totalDiv.className = 'total';
       totalDiv.textContent = `Total Bonus: ${result.score.toFixed(3)}`;
