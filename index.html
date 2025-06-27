@@ -311,7 +311,7 @@
 
       const totalDiv = document.createElement('div');
       totalDiv.className = 'total';
-      totalDiv.textContent = `Total Bonus: ${result.score.toFixed(3)}`;
+      totalDiv.textContent = `Total Bonus: ${(result.score * 100).toFixed(3)}%`;
       document.getElementById('result').appendChild(totalDiv);
     });
   </script>
