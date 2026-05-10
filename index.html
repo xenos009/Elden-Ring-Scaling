@@ -50,19 +50,42 @@
       font-weight: 600;
     }
     /* Form Grid */
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 20px;
+    }
+
+    .letter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 20px;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 20px;
     }
+
     label {
       display: block;
       margin-bottom: 6px;
       font-size: 0.9rem;
       color: #bbbbbb;
     }
-    select, input[type="number"] {
-      width: 100%;
+    select {
+      width: 110%;
+      padding: 10px 12px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      background: #2a2a3a;
+      color: #ececec;
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+    }
+    input[type="number"] {
+      width: 95%;
       padding: 10px 12px;
       border: 1px solid #333;
       border-radius: 8px;
@@ -81,6 +104,26 @@
     }
     /* Button */
     button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #5fb3ff;
+      color: #1e1e2e;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .toggle-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+      gap: 0px;
+    }
+    .toggle-letters, .toggle-numbers {
       margin-top: 30px;
       width: 100%;
       padding: 14px;
@@ -144,27 +187,54 @@
     <!-- Scaling Grades Section -->
     <div class="section">
       <div class="section-title">Scaling Grades</div>
-      <div class="grid">
+      <div class="num-grid">
         <div>
-          <label for="strGrade">Strength Grade</label>
-          <select id="strGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+          <label for="num-strGrade">Strength Scaling</label>
+          <input id="num-strGrade" type="number" value="0" min="0" max="999">
         </div>
         <div>
-          <label for="dexGrade">Dexterity Grade</label>
-          <select id="dexGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+          <label for="num-dexGrade">Dexterity Scaling</label>
+          <input id="num-dexGrade" type="number" value="0" min="0" max="999">
         </div>
         <div>
-          <label for="intGrade">Intelligence Grade</label>
-          <select id="intGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+          <label for="num-intGrade">Intelligence Scaling</label>
+          <input id="num-intGrade" type="number" value="0" min="0" max="999">
         </div>
         <div>
-          <label for="fthGrade">Faith Grade</label>
-          <select id="fthGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+          <label for="num-fthGrade">Faith Scaling</label>
+          <input id="num-fthGrade" type="number" value="0" min="0" max="999">
         </div>
         <div>
-          <label for="arcGrade">Arcane Grade</label>
-          <select id="arcGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+          <label for="num-arcGrade">Arcane Scaling</label>
+          <input id="num-arcGrade" type="number" value="0" min="0" max="999">
         </div>
+      </div>
+
+      <div class="letter-grid">
+        <div>
+          <label for="letter-strGrade">Strength Grade</label>
+          <select id="letter-strGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+        <div>
+          <label for="letter-dexGrade">Dexterity Grade</label>
+          <select id="letter-dexGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+        <div>
+          <label for="letter-intGrade">Intelligence Grade</label>
+          <select id="letter-intGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+        <div>
+          <label for="letter-fthGrade">Faith Grade</label>
+          <select id="letter-fthGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+        <div>
+          <label for="letter-arcGrade">Arcane Grade</label>
+          <select id="letter-arcGrade"><option>None</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select>
+        </div>
+      </div>
+
+      <div class="toggle-buttons">
+        <button id="toggle-numbers">Toggle Letter/Number</button>
       </div>
     </div>
 
@@ -218,6 +288,11 @@
   <script>
     const physical = [0,15,35,46.5,57.5,67.5,75,82.5,90,92.5,96];
     const magic = [0,19,40,53,66.5,80,85,90,95,97.5,100];
+    const letter_grid = document.querySelector('.letter-grid');
+    const number_grid = document.querySelector('.num-grid');
+    let letters_shown = false;
+    letter_grid.style.display = "none";
+    number_grid.style.display = "grid";
 
     function statGrade(s) {
       switch(s) {
@@ -277,14 +352,39 @@
       return {stats: best, score: bestScore};
     }
 
+    document.getElementById('toggle-numbers').addEventListener('click', ()=> {
+      letters_shown = !letters_shown;
+
+      if (letters_shown) {
+        letter_grid.style.display = "grid";
+        number_grid.style.display = "none";
+      }
+      else {
+        letter_grid.style.display = "none";
+        number_grid.style.display = "grid";
+      }
+    });
+
+    let scaling;
     document.getElementById('optimizeBtn').addEventListener('click', ()=> {
-      const scaling = [
-        statGrade(document.getElementById('strGrade').value),
-        statGrade(document.getElementById('dexGrade').value),
-        statGrade(document.getElementById('intGrade').value),
-        statGrade(document.getElementById('fthGrade').value),
-        statGrade(document.getElementById('arcGrade').value)
-      ];
+      if (letters_shown) {
+        scaling = [
+          statGrade(document.getElementById('letter-strGrade').value),
+          statGrade(document.getElementById('letter-dexGrade').value),
+          statGrade(document.getElementById('letter-intGrade').value),
+          statGrade(document.getElementById('letter-fthGrade').value),
+          statGrade(document.getElementById('letter-arcGrade').value)
+        ];
+      }
+      else {
+        scaling = [
+          document.getElementById('num-strGrade').value / 100,
+          document.getElementById('num-dexGrade').value / 100,
+          document.getElementById('num-intGrade').value / 100,
+          document.getElementById('num-fthGrade').value / 100,
+          document.getElementById('num-arcGrade').value / 100
+        ];
+      }
       const base = [
         +document.getElementById('strStat').value,
         +document.getElementById('dexStat').value,
