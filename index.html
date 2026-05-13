@@ -318,12 +318,18 @@
     function totalBonus(scaling, stats, twoHanding) {
       return scaling.reduce((sum, g, i) => {
         if (g <= 0) return sum;
+    
         const table = i < 2 ? 'phys' : 'magic';
-        let statValue = stats[i];
+        const statValue = stats[i];
+    
+        let contribution = g * (f(statValue, table) / 100);
+    
+        // Apply 1.5x scaling bonus only to STR scaling contribution
         if (twoHanding && i === 0) {
-          statValue = Math.floor(statValue * 1.5);
+          contribution *= 1.5;
         }
-        return sum + g * (f(statValue, table) / 100);
+    
+        return sum + contribution;
       }, 0);
     }
 
